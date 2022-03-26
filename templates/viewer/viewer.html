@@ -1,0 +1,92 @@
+{% extends 'base/base.html' %}
+
+{% block head_injection %}
+
+{% load static %}
+<!--jQuery-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<!--Fontawesome-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+	integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+
+
+<link rel="stylesheet" type="text/css" href="{% static '/potree/build/potree/potree.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static '/potree/libs/jquery-ui/jquery-ui.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static '/potree/libs/openlayers3/ol.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static '/potree/libs/spectrum/spectrum.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static '/potree/libs/jstree/themes/mixed/style.css' %}">
+{% endblock %}
+
+{% block title %} {{cloud.title}} {% endblock %}
+
+{% block body_block %}
+
+
+<script type="text/javascript" src="{% static '/potree/libs/jquery/jquery-3.1.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static '/potree/libs/spectrum/spectrum.js' %}"></script>
+<script type="text/javascript" src="{% static '/potree/libs/jquery-ui/jquery-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static '/potree/libs/other/BinaryHeap.js' %}"></script>
+<script type="text/javascript" src="{% static '/potree/libs/tween/tween.min.js' %}"></script>
+<script type="text/javascript" src="{% static '/potree/libs/d3/d3.js' %}"></script>
+<script type="text/javascript" src="{% static '/potree/libs/proj4/proj4.js' %}"></script>
+<script type="text/javascript" src="{% static '/potree/libs/openlayers3/ol.js' %}"></script>
+<script type="text/javascript" src="{% static '/potree/libs/i18next/i18next.js' %}"></script>
+<script type="text/javascript" src="{% static '/potree/libs/jstree/jstree.js' %}"></script>
+<script type="text/javascript" src="{% static '/potree/build/potree/potree.js' %}"></script>
+<script type="text/javascript" src="{% static '/potree/libs/plasio/js/laslaz.js' %}"></script>
+
+
+
+
+<!-- INCLUDE ADDITIONAL DEPENDENCIES HERE -->
+<!-- INCLUDE SETTINGS HERE -->
+<div class="container">
+	<div style="position: absolute; left: 0%; right:0%; top:65px; bottom:0% ">
+		<div class="potree_container" style="position: absolute; width:100%; height:100%; left:0px; top:0px;">
+			<div id="potree_render_area" style="background-image: url({% static '/img/background.jpg' %});"></div>
+			<div id="potree_sidebar_container"> </div>
+		</div>
+	</div>
+</div>
+
+
+<script type="module">
+	window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
+	viewer.setEDLEnabled(false); 
+	viewer.setFOV(60);
+	viewer.setPointBudget(1_000_000);
+	viewer.loadSettingsFromURL();
+	viewer.setBackground("none");
+
+	viewer.setDescription("{{cloud.description}}");
+
+	viewer.loadGUI(() => {
+		viewer.setLanguage('en');
+		$("#menu_tools").next().show();
+		$("#menu_clipping").next().show();
+	});
+
+	Potree.loadPointCloud("{% get_static_prefix%}/pointclouds/{{cloud.file_name}}/metadata.json", "{{cloud.title}}", async function (e) {
+		let scene = viewer.scene;
+		let pointcloud = e.pointcloud;
+
+		let material = pointcloud.material;
+		material.size = 1;
+		material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+		material.shape = Potree.PointShape.SQUARE;
+
+		scene.addPointCloud(pointcloud);
+
+		viewer.fitToScreen();
+		viewer.compass.setVisible(true)
+		viewer.setControls(viewer.earthControls)
+
+	});
+</script>
+
+<link rel="stylesheet" href="{% static '/viewer/viewer.css'  %}" />
+{% endblock %}

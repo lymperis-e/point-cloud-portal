@@ -1,0 +1,195 @@
+{% extends 'base/base.html' %}
+
+{% block head_injection %}
+
+{% load static %}
+<!--jQuery-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<!--Fontawesome-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+  integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+{% endblock %}
+
+
+
+{% block body_block %}
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+  <h1 class="display-4">
+
+    <img src="{% static 'icons/drone.png' %}" width="130px">
+    Datasets
+  </h1>
+  <p class="lead">All availables datasets</p>
+
+
+  <div class="container">
+    <div class="card-deck mb-3 text-center">
+
+
+
+      <!--DEMO PAGE-->
+      {% if user.is_authenticated == False%}
+      
+      <div class="card mb-4 box-shadow">
+        <div class="card-header">
+
+          <h4 class="my-0 font-weight-normal">
+            <img src="{% static '/icons/cube-3d.png' %}" width="35" style="margin-right:20px">
+            Demo - Grand Canyon
+          </h4>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title pricing-card-title"> <small class="text-muted">Point Cloud</small></h5>
+          <ul class="list-unstyled mt-3 mb-4">
+            <li>
+              Details:
+              <span style="color:darkkhaki; font-weight: 400;">
+
+              </span>
+            </li>
+            <li>
+              <span style="color:cadetblue; font-weight: 400;">
+
+              </span>
+              
+            </li>
+
+          </ul>
+        </div>
+        <div class="card-footer">
+          <a type="button" class="btn btn-block btn-outline-primary " href="/demo/grand_canyon">
+            <img src="{% static '/icons/3d-modeling.png' %}" width="25">
+           Open in viewer</a>
+        </div>
+      </div>
+      <div class="card mb-4 box-shadow">
+
+
+        <div class="card-header">
+
+          <h4 class="my-0 font-weight-normal">
+            <img src="{% static '/icons/cube-3d.png' %}" width="35" style="margin-right:20px">
+            Demo -  Retz
+          </h4>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title pricing-card-title"> <small class="text-muted">Point Cloud </small></h5>
+          <ul class="list-unstyled mt-3 mb-4">
+            <li>
+              Details:
+              <span style="color:darkkhaki; font-weight: 400;">
+
+              </span>
+            </li>
+            <li>
+              <span style="color:cadetblue; font-weight: 400;">
+
+              </span>
+              points
+            </li>
+
+          </ul>
+        </div>
+        <div class="card-footer">
+          <a type="button" class="btn btn-block btn-outline-primary " href="/demo/retz">
+            <img src="{% static '/icons/3d-modeling.png' %}" width="25">
+            Open in viewer</a>
+        </div>
+      </div>
+      {% endif %}
+      <!--End DEMO PAGE-->
+
+
+
+
+
+      {% for cloud in clouds %}
+      <div class="card mb-4 box-shadow">
+
+
+        <div class="card-header">
+
+          <h4 class="my-0 font-weight-normal">
+            <img src="{% static '/icons/cube-3d.png' %}" width="35" style="margin-right:20px">
+            {{cloud.title}}
+          </h4>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title pricing-card-title"> <small class="text-muted">Point Cloud</small></h5>
+          <ul class="list-unstyled mt-3 mb-4">
+            <li>
+              Details:
+              <span style="color:darkkhaki; font-weight: 400;">
+                {{cloud.description}}
+              </span>
+            </li>
+            <li>
+              <span style="color:cadetblue; font-weight: 400;">
+                {{cloud.point_count}}
+              </span>
+              points
+            </li>
+
+          </ul>
+        </div>
+        <div class="card-footer">
+          <a type="button" class="btn btn-block btn-outline-primary " href="{% url 'viewer' cloud.file_name%}">
+            <img src="{% static '/icons/3d-modeling.png' %}" width="25">
+            Open in Viewer</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+
+
+  <footer class="pt-4 my-md-5 pt-md-5 border-top">
+    <div class="row">
+      <div class="col-12 col-md">
+        <img class="mb-2" src="{% static '/img/favicon.png' %}" alt="" width="24" height="24">
+        <small class="d-block mb-3 text-muted">&copy; 2017-2018</small>
+      </div>
+      <div class="col-6 col-md">
+        <h5>Features</h5>
+        <ul class="list-unstyled text-small">
+          <li><a class="text-muted" href="#">Cool stuff</a></li>
+          <li><a class="text-muted" href="#">Random feature</a></li>
+          <li><a class="text-muted" href="#">Team feature</a></li>
+          <li><a class="text-muted" href="#">Stuff for developers</a></li>
+          <li><a class="text-muted" href="#">Another one</a></li>
+          <li><a class="text-muted" href="#">Last time</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md">
+        <h5>Resources</h5>
+        <ul class="list-unstyled text-small">
+          <li><a class="text-muted" href="#">Resource</a></li>
+          <li><a class="text-muted" href="#">Resource name</a></li>
+          <li><a class="text-muted" href="#">Another resource</a></li>
+          <li><a class="text-muted" href="#">Final resource</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md">
+        <h5>About</h5>
+        <ul class="list-unstyled text-small">
+          <li><a class="text-muted" href="#">Team</a></li>
+          <li><a class="text-muted" href="#">Locations</a></li>
+          <li><a class="text-muted" href="#">Privacy</a></li>
+          <li><a class="text-muted" href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</div>
+
+
+
+
+<!--Page CSS-->
+<link rel="stylesheet" href="{% static '/index/index.css'  %}" />
+{% endblock %}
